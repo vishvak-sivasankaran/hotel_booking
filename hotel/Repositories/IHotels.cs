@@ -10,5 +10,8 @@ namespace hotel.Repositories
         public Hotels Posthotel(Hotels hotel);
         public Hotels Puthotel(int hotel_Id, Hotels hotel);
         public Hotels Deletehotel(int hotel_Id);
+        
+
+
     }
 }

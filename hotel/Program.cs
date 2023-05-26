@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IHotelStaffs,HotelStaffRepositories>();
 builder.Services.AddScoped<IHotels, HotelsRepositories>();
 builder.Services.AddScoped<IHotelRooms,HotelRoomsRepositories>();
-builder.Services.AddScoped<IHotelCustomers,HotelCustomersRepositories>();
+builder.Services.AddScoped<IHotelCustomers,HotelCustomersRepositories>();   
 
 var app = builder.Build();
 

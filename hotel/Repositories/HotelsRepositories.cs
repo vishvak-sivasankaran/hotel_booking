@@ -44,5 +44,6 @@ namespace hotel.Repositories
             _hotelContext.SaveChanges();
             return st;
         }
+         
     }
 }

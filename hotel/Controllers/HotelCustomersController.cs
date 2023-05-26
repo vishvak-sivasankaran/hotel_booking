@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using hotel.models;
 using hotel.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hotel.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HotelCustomersController : ControllerBase
@@ -46,6 +48,25 @@ namespace hotel.Controllers
         {
             return st.DeleteCustomer(id);
         }
-
+        [HttpGet("location")]
+        public IEnumerable<Hotels> FilterLocation(string location)
+        {
+            return st.FilterLocation(location);
+        }
+        [HttpGet("amenities")]
+        public IEnumerable<Hotels> FilterAmenities(string amenities)
+        {
+            return st.FilterAmenities(amenities);
+        }
+        [HttpGet("pricerange")]
+        public IEnumerable<Hotels> FilterPriceRange(decimal minPrice, decimal maxPrice)
+        {
+            return st.FilterPriceRange(minPrice, maxPrice);
+        }
+        [HttpGet("availability")]
+        public int GetAvailableRoomCount(int hotel_Id)
+        {
+            return st.GetAvailableRoomCount(hotel_Id);
+        }
     }
 }
