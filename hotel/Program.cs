@@ -1,5 +1,7 @@
 using hotel.models;
+using hotel.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -41,6 +43,10 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
 });
+builder.Services.AddScoped<IHotelStaffs,HotelStaffRepositories>();
+builder.Services.AddScoped<IHotels, HotelsRepositories>();
+builder.Services.AddScoped<IHotelRooms,HotelRoomsRepositories>();
+builder.Services.AddScoped<IHotelCustomers,HotelCustomersRepositories>();
 
 var app = builder.Build();
 

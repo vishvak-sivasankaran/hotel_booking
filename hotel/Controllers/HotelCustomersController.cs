@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using hotel.models;
+using hotel.Repositories;
 
 namespace hotel.Controllers
 {
@@ -13,111 +14,38 @@ namespace hotel.Controllers
     [ApiController]
     public class HotelCustomersController : ControllerBase
     {
-        private readonly HotelContext _context;
-
-        public HotelCustomersController(HotelContext context)
+        private readonly IHotelCustomers st;
+        public HotelCustomersController(IHotelCustomers st)
         {
-            _context = context;
+            this.st = st;
         }
-
-        // GET: api/HotelCustomers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelCustomers>>> GetCustomers()
+        public IEnumerable<HotelCustomers> Get()
         {
-          if (_context.Customers == null)
-          {
-              return NotFound();
-          }
-            return await _context.Customers.ToListAsync();
+            return st.GetAllCustomer();
         }
 
-        // GET: api/HotelCustomers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<HotelCustomers>> GetHotelCustomers(int id)
+        public HotelCustomers GetById(int id)
         {
-          if (_context.Customers == null)
-          {
-              return NotFound();
-          }
-            var hotelCustomers = await _context.Customers.FindAsync(id);
-
-            if (hotelCustomers == null)
-            {
-                return NotFound();
-            }
-
-            return hotelCustomers;
+            return st.GetCustomerById(id);
         }
 
-        // PUT: api/HotelCustomers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotelCustomers(int id, HotelCustomers hotelCustomers)
-        {
-            if (id != hotelCustomers.Cus_id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(hotelCustomers).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HotelCustomersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/HotelCustomers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<HotelCustomers>> PostHotelCustomers(HotelCustomers hotelCustomers)
+        public HotelCustomers Postcustomer(HotelCustomers customer)
         {
-          if (_context.Customers == null)
-          {
-              return Problem("Entity set 'HotelContext.Customers'  is null.");
-          }
-            _context.Customers.Add(hotelCustomers);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetHotelCustomers", new { id = hotelCustomers.Cus_id }, hotelCustomers);
+            return st.PostCustomer(customer);
         }
-
-        // DELETE: api/HotelCustomers/5
+        [HttpPut("{id}")]
+        public HotelCustomers Putcustomer(int id, HotelCustomers customer)
+        {
+            return st.PutCustomer(id, customer);
+        }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHotelCustomers(int id)
+        public HotelCustomers Deletecustomer(int id)
         {
-            if (_context.Customers == null)
-            {
-                return NotFound();
-            }
-            var hotelCustomers = await _context.Customers.FindAsync(id);
-            if (hotelCustomers == null)
-            {
-                return NotFound();
-            }
-
-            _context.Customers.Remove(hotelCustomers);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return st.DeleteCustomer(id);
         }
 
-        private bool HotelCustomersExists(int id)
-        {
-            return (_context.Customers?.Any(e => e.Cus_id == id)).GetValueOrDefault();
-        }
     }
 }
